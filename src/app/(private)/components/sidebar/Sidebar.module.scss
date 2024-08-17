@@ -1,0 +1,28 @@
+.root {
+  height: calc(100vh - 48px);
+  top: 48px;
+  left: 0;
+  bottom: 0;
+  @apply fixed transition-all overflow-y-auto bg-white;
+}
+
+.listItem {
+  :global {
+    .ant-menu-submenu-title,
+    .ant-menu-item {
+      display: flex;
+      align-items: center;
+      padding: 20px !important;
+    }
+  }
+
+  @apply flex flex-col gap-1 py-1 overflow-hidden w-full;
+}
+
+.toggleSidebar {
+  @apply p-2 px-4 font-semibold flex items-center cursor-pointer select-none;
+}
+
+.linkSidebar {
+  @apply transition flex items-center gap-2 py-2.5 px-4 text-base font-normal;
+}
