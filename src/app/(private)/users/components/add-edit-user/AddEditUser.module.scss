@@ -1,0 +1,15 @@
+.styleCollapse {
+     :global {
+          .ant-collapse-header {
+               padding: 0 !important;
+          }
+
+          .ant-collapse-expand-icon {
+               color: var(--color-500);
+          }
+
+          .ant-collapse-content-box {
+               padding: 0 !important;
+          }
+     }
+}

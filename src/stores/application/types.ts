@@ -15,6 +15,8 @@ export interface ModalInstance<T = any> {
 export type ApplicationStore = {
   theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
+  isDisabledKeyboardShortcut: boolean;
+  setIsDisabledKeyboardShortcut: (isDisabledKeyboardShortcut: boolean) => void;
   openSidebar: boolean;
   setOpenSidebar: (openSidebar: boolean) => void;
   modals: ModalInstance[];

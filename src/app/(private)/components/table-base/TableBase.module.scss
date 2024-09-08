@@ -1,0 +1,10 @@
+.root {
+  :global {
+    table {
+      width: max-content !important;
+    }
+    td.ant-table-cell-ellipsis {
+      max-width: 100px;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.root {
+    position: relative;
+    :global {
+        .resize-handle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            cursor: col-resize;
+            user-select: none;
+            background-color: transparent;
+        }
+        .resize-handle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+
+.sorter {
+    :global {
+        .sort-handle {
+            z-index: 1;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

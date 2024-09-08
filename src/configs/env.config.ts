@@ -1,9 +1,1 @@
-export const NEXT_PUBLIC_ENV = process.env.NEXT_PUBLIC_ENV;
-export const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as any;
-export const API_USER = process.env.NEXT_PUBLIC_API_USER;
-export const API_CATEGORY = process.env.NEXT_PUBLIC_API_CATEGORY;
-export const API_EXPORT = process.env.NEXT_PUBLIC_API_EXPORT;
-export const API_UPLOAD = process.env.NEXT_PUBLIC_API_UPLOAD;
-export const API_FIXED_ASSETS = process.env.NEXT_PUBLIC_API_FIXED_ASSETS;
-export const API_CONFIG = process.env.NEXT_PUBLIC_API_CONFIG;
-export const API_UPLOAD_TEMP = process.env.NEXT_PUBLIC_API_UPLOAD_TEMP;
+export const API = process.env.NEXT_PUBLIC_API;

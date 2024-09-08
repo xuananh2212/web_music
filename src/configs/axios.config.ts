@@ -1,7 +1,6 @@
 import cookie from "@/apis/cookies";
-import { findMessageError } from "@/helpers/errors";
 import { deepTrimObject } from "@/helpers/object";
-import AuthService from "@/services/user/UserService";
+import musicService from "@/services/music/musicService";
 import "axios";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -10,7 +9,7 @@ import qs from "qs";
 import { toast } from "sonner";
 NProgress.configure({ showSpinner: false });
 export const axiosInstance = axios.create({
-  baseURL: process.env.API_USER,
+  baseURL: process.env.API,
   paramsSerializer: (params) => {
     return qs.stringify(params, {
       encodeDotInKeys: true,
@@ -33,7 +32,6 @@ axiosInstance.interceptors.request.use((config) => {
   if (!config.hiddenProgress) {
     NProgress.start();
   }
-  debugger;
   const token = Cookies.get("access_token");
   if (token && !config.headers?.Authorization) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -54,12 +52,15 @@ axiosInstance.interceptors.response.use(
       NProgress.done();
     }
     const data = response?.data;
+    if (data?.user?.role !== 3) {
+      toast.error("không có quyền đăng nhập");
+      throw new Error("không có quyền đăng nhập");
+    }
     if (!response.config.hiddenToastError) {
       if (data?.message && typeof data?.message === "string") {
-        toast.error(data.message);
+        toast.success(data.message);
       }
     }
-
     return response;
   },
   async (error) => {
@@ -68,8 +69,7 @@ axiosInstance.interceptors.response.use(
     }
     const data = error.response?.data;
     if (!error.config.hiddenToastError) {
-      const errorMessage = findMessageError(data) || data;
-
+      const errorMessage = data?.message;
       if (errorMessage && typeof errorMessage === "string") {
         toast.error(errorMessage);
       }
@@ -104,6 +104,6 @@ axiosInstance.interceptors.response.use(
 );
 
 const getRefreshToken = async () => {
-  const res = await AuthService.refreshToken();
+  const res = await musicService.refreshToken();
   return res?.data;
 };

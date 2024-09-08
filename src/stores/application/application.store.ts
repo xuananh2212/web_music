@@ -25,6 +25,8 @@ const useApplicationStore = create<ApplicationStore>((set) => {
       changeThemeDocument(theme);
       set({ theme });
     },
+    isDisabledKeyboardShortcut: false,
+    setIsDisabledKeyboardShortcut: (isDisabledKeyboardShortcut: boolean) => set({ isDisabledKeyboardShortcut }),
     openSidebar: true,
     setOpenSidebar: (openSidebar: boolean) => set({ openSidebar }),
     modals: [],
