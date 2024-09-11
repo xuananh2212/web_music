@@ -29,7 +29,7 @@ class musicService {
     });
   }
   static getUserDetail(id: string) {
-    return axiosInstance.get(`/organization/User/${id}`, {
+    return axiosInstance.get(`/user/v1/profile`, {
       baseURL: API,
     });
   }

@@ -62,7 +62,6 @@ const useMutationLogin = () => {
         }
         await cookie.set(cookies);
         router.push(next || "/dashboard");
-        console.log("router", 1);
         return response;
       },
     }),

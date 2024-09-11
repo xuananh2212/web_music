@@ -1,4 +1,5 @@
 import { Rule } from "antd/lib/form";
+import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB } from "./common.constant";
 
 export const patternEmail =
   /^(([^<>()\\[\].,;:\s@"]+(\.[^<>()\\[\].,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -155,4 +156,24 @@ export const validMoneyVND = (message?: string): Rule => {
     },
     message: message || "Vui lòng nhập số tiền hợp lệ theo định dạng tiền tệ Việt Nam. Ví dụ: 1.000,00 hoặc 1000.00",
   };
+};
+
+export const validateImage = (file: File | null, name: string) => {
+  if (!file) return { isValid: false, errorType: "fileMissing", errorMessage: "" };
+  if (file.size > MAX_IMAGE_SIZE_BYTES) {
+    return {
+      isValid: false,
+      errorType: "sizeExceeded",
+      errorMessage: `Ảnh ${name} không được vượt quá ${MAX_IMAGE_SIZE_MB}MB.`,
+    };
+  }
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    return {
+      isValid: false,
+      errorType: "invalidType",
+      errorMessage: `Ảnh ${name} phải có định dạng: GIF, SVG, JPG, JPEG, PNG, WebP.`,
+    };
+  }
+
+  return { isValid: true, errorType: "", errorMessage: "" };
 };

@@ -2,7 +2,7 @@ import { openConfirmDeleteModal, openModal } from "@/components";
 import { ModalBaseProps } from "@/stores/application";
 import { MutationFunction, UseMutateAsyncFunction, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Modal, Skeleton } from "antd";
-import { useForm } from "antd/es/form/Form";
+import { FormInstance } from "antd/lib";
 import clsx from "clsx";
 import { ComponentType } from "react";
 import { toast } from "sonner";
@@ -37,9 +37,13 @@ interface FormMasterProps {
   onAddSuccess: () => void;
   dataEdit?: any;
   isFetching: boolean;
+  form: FormInstance<any>;
+  isPending?: boolean;
 }
 
 const FormMaster = ({
+  isPending,
+  form,
   titleName,
   children,
   type,
@@ -61,7 +65,6 @@ const FormMaster = ({
   dataEdit,
 }: FormMasterProps) => {
   const queryClient = useQueryClient();
-  const [form] = useForm();
   const { isPending: isAddPending, mutateAsync: mutateAddAsync } = useMutation({
     mutationFn: mutationAddFn,
     onSuccess: () => {
@@ -148,7 +151,7 @@ const FormMaster = ({
         <Skeleton active />
       ) : (
         <CustomForm
-          loading={isAddPending || isUpdatePending}
+          loading={isAddPending || isUpdatePending || isPending}
           type={type}
           form={form}
           initialValues={initialValues}

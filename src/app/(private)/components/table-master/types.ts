@@ -14,6 +14,7 @@ export interface TableMasterProps
     | "disableRowSelection"
     | "canInitializeData"
     | "onInitData"
+    | "hiddenAdd"
   > {
   data: any;
   title: string;
@@ -33,6 +34,7 @@ export type BulkActionType = "delete";
 export interface TableBarProps extends Pick<TableBaseProps, "onChangeQueryParams" | "queryParams"> {
   placeholderInput?: string;
   actions: Action[];
+  hiddenAdd: boolean | undefined;
   selectedRowKeys: string[];
   onClickDropDown?: MenuProps["onClick"];
   onFinishFailed?: (errorInfo: any) => void;
@@ -72,4 +74,5 @@ export type BaseQueryTableResult = Pick<
   | "onInitData"
   | "canInitializeData"
   | "defaultColumns"
+  | "hiddenAdd"
 >;

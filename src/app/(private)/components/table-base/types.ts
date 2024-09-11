@@ -39,6 +39,7 @@ export interface TableBaseProps {
   size?: TableProps["size"];
   selectedRowKeys: string[];
   onSelectChange: any;
+  hiddenAdd?: boolean;
   loading: boolean;
   disableRowSelection?: boolean;
   canInitializeData?: boolean;

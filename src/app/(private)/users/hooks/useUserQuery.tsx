@@ -5,17 +5,16 @@ import { BaseQueryTable, TableMasterProps } from "@/app/(private)/components/tab
 import { openModal } from "@/components";
 import MUSIC_QUERY_KEY_ENUM from "@/services/music/keys";
 import musicService from "@/services/music/musicService";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { isEqual } from "lodash";
 import { useMemo, useState } from "react";
 import { USER_LIST_DEFAULT_COLUMNS } from "../columns.setting";
 import AddEditUser from "../components/add-edit-user/AddEditUser";
 
 const formatData = (data: any) => {
-  console.log("data", data);
   return {
     ...data,
-    items: data?.items.map((item: any) => {
+    items: data?.users.map((item: any) => {
       return {
         ...item,
         key: item.id,
@@ -25,12 +24,10 @@ const formatData = (data: any) => {
 };
 
 const useUserQuery: BaseQueryTable = () => {
-  const initialQueryParams = { keyword: "", expanded: true };
+  const initialQueryParams = { keyword: "" };
   const [queryParams, setQueryParams] = useState<any>(initialQueryParams);
-  const queryClient = useQueryClient();
   const onAction: TableMasterProps["onAction"] = (type, value) => {
     if (type === "delete" && value.id) {
-      // onDelete(value);
     } else {
       openModal(AddEditUser, {
         type,
@@ -52,7 +49,6 @@ const useUserQuery: BaseQueryTable = () => {
     queryKey: [MUSIC_QUERY_KEY_ENUM.USERS, queryParams],
     queryFn: async () => {
       const response = await musicService.getUsers(queryParams);
-      console.log("response?.data", response?.data);
       return formatData(response?.data);
     },
     placeholderData: (prev) => prev,
@@ -83,6 +79,7 @@ const useUserQuery: BaseQueryTable = () => {
     defaultColumns: USER_LIST_DEFAULT_COLUMNS,
     onChangeQueryParams: setQueryParams,
     onAction,
+    hiddenAdd: true,
   };
 };
 

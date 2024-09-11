@@ -18,6 +18,7 @@ const TableBar = ({
   onAction,
   actionDropdownAdd,
   moreActions,
+  hiddenAdd,
   queryParams,
 }: TableBarProps) => {
   const handleKeyWordChange = useCallback(
@@ -54,12 +55,12 @@ const TableBar = ({
           {moreActionsElement}
           {actionDropdownAdd && actionDropdownAdd.length ? (
             <Dropdown menu={{ items: actionDropdownAdd, onClick: onClickDropDown }} trigger={["click"]}>
-              <Button type="primary" icon={<Plus />}>
+              <Button disabled={hiddenAdd} type="primary" icon={<Plus />}>
                 Thêm
               </Button>
             </Dropdown>
           ) : (
-            <Button type="primary" icon={<Plus />} onClick={() => onAction("add")}>
+            <Button disabled={hiddenAdd} type="primary" icon={<Plus />} onClick={() => onAction("add")}>
               Thêm
             </Button>
           )}

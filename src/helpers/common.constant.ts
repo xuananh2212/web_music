@@ -8,6 +8,9 @@ export enum TYPE_EXPORT {
   XLSX = "xlsx",
   PDF = "pdf",
 }
+export const MAX_IMAGE_SIZE_MB = 5;
+export const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
+export const ALLOWED_IMAGE_TYPES = ["image/gif", "image/svg+xml", "image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 export enum StatusAccount {
   InActive = "Ngưng sử dụng",

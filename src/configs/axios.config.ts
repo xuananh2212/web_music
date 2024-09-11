@@ -52,13 +52,9 @@ axiosInstance.interceptors.response.use(
       NProgress.done();
     }
     const data = response?.data;
-    if (data?.user?.role !== 3) {
-      toast.error("không có quyền đăng nhập");
-      throw new Error("không có quyền đăng nhập");
-    }
     if (!response.config.hiddenToastError) {
       if (data?.message && typeof data?.message === "string") {
-        toast.success(data.message);
+        // toast.success(data.message);
       }
     }
     return response;

@@ -1,13 +1,13 @@
 import { TableBaseProps } from "@/app/(private)/components/table-base";
-import { formatDate, formatDateTime } from "@/helpers/date";
-import { Tag } from "antd";
-const convertLevelOrganization = (level: 0 | 1) => {
-  return level === 1 ? <Tag color="blue">Phòng ban</Tag> : <Tag color="green">Đơn vị</Tag>;
+import { formatDateTime } from "@/helpers/date";
+import { Image, Tag } from "antd";
+const convertStatus = (value: any) => {
+  return <Tag>{value === 1 ? "Đang hoạt động" : "Tài khoản bị khóa"}</Tag>;
 };
 export const USER_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
   {
-    title: "Mã",
-    dataIndex: "code",
+    title: "Tên người dùng",
+    dataIndex: "user_name",
     fixed: "left",
     ellipsis: true,
     width: 200,
@@ -15,95 +15,49 @@ export const USER_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     isFilter: true,
   },
   {
-    title: "Tên",
-    dataIndex: "name",
+    title: "Hình ảnh",
+    dataIndex: "url_image",
     width: 200,
-    ellipsis: true,
     isSort: true,
     isDrag: true,
     isFilter: true,
-    render: (text, record) => {
-      return <div className={record?.parent_id ? "" : "text-ant-blue"}>{text}</div>;
+    render: (value: string) => {
+      return value && <Image width={35} height={35} src={value} />;
     },
   },
   {
-    title: "Cấp tổ chức",
-    dataIndex: "organization_level",
+    title: "email",
+    dataIndex: "email",
     width: 200,
-    render: (text) => {
-      return convertLevelOrganization(text);
+    ellipsis: true,
+    isSort: true,
+    isDrag: true,
+    isFilter: true,
+  },
+  {
+    title: "Số điên thoại",
+    dataIndex: "phone",
+    width: 200,
+    ellipsis: true,
+    isSort: true,
+    isDrag: true,
+    isFilter: true,
+  },
+
+  {
+    title: "Trạng thái",
+    dataIndex: "status",
+    width: 200,
+    ellipsis: true,
+    isSort: true,
+    isDrag: true,
+    render: (value: any) => {
+      return convertStatus(value);
     },
-    ellipsis: true,
-    isSort: true,
-    isDrag: true,
-    isFilter: true,
-    filter: {
-      type: "select",
-      options: [
-        { value: 0, label: "Đợn vị" },
-        { value: 1, label: "Phòng ban" },
-      ],
-    },
-  },
-  {
-    title: "Địa chỉ",
-    dataIndex: "address",
-    width: 200,
-    ellipsis: true,
-    isSort: true,
-    isDrag: true,
-    isFilter: true,
-    hidden: true,
-  },
-  {
-    title: "Số đăng ký",
-    dataIndex: "register_number",
-    width: 200,
-    ellipsis: true,
-    isSort: true,
-    isDrag: true,
-    isFilter: true,
-    hidden: true,
-  },
-  {
-    title: "Nơi cấp",
-    dataIndex: "place_of_issue",
-    width: 200,
-    ellipsis: true,
-    isSort: true,
-    isDrag: true,
-    isFilter: true,
-    hidden: true,
-  },
-  {
-    title: "Ngày cấp",
-    dataIndex: "date_of_issue",
-    width: 200,
-    ellipsis: true,
-    render: (data: string) => {
-      return data ? formatDate(data, "DD-MM-YYYY") : "";
-    },
-    filter: {
-      type: "date",
-    },
-    isSort: true,
-    isDrag: true,
-    isFilter: true,
-    hidden: true,
-  },
-  {
-    title: "Người tạo",
-    dataIndex: "created_by_name",
-    width: 200,
-    ellipsis: true,
-    isSort: true,
-    isDrag: true,
-    isFilter: true,
-    hidden: true,
   },
   {
     title: "Thời gian tạo",
-    dataIndex: "created_on",
+    dataIndex: "created_at",
     width: 200,
     render: formatDateTime,
     filter: {
@@ -113,27 +67,5 @@ export const USER_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     isDrag: true,
     isFilter: true,
     hidden: true,
-  },
-  {
-    title: "Người sửa",
-    dataIndex: "modified_by_name",
-    width: 200,
-    ellipsis: true,
-    isSort: true,
-    isDrag: true,
-    isFilter: true,
-    hidden: true,
-  },
-  {
-    title: "Lịch sử cập nhật",
-    dataIndex: "modified_on",
-    width: 200,
-    render: formatDateTime,
-    filter: {
-      type: "date",
-    },
-    ellipsis: true,
-    isDrag: true,
-    isFilter: true,
   },
 ];

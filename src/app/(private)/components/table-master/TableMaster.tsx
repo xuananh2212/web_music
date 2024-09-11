@@ -34,6 +34,7 @@ export default function TableMaster({
         </div>
         <TableBar
           {...tableBarProps}
+          hiddenAdd={props?.hiddenAdd}
           queryParams={queryParams}
           onChangeQueryParams={onChangeQueryParams}
           actions={actionsBar}
