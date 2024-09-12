@@ -47,9 +47,9 @@ const useUserQuery: BaseQueryTable = () => {
   };
   const listAction: FormType[] = ["view", "edit"];
   const { isPending, refetch, data } = useQuery({
-    queryKey: [MUSIC_QUERY_KEY_ENUM.USERS, queryParams],
+    queryKey: [MUSIC_QUERY_KEY_ENUM.ARTISTS, queryParams],
     queryFn: async () => {
-      const response = await musicService.getUsers(queryParams);
+      const response = await musicService.getArtists(queryParams);
       return formatData(response?.data);
     },
     placeholderData: (prev) => prev,

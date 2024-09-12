@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const useUserDetailQuery = (id: string | undefined) => {
   return useQuery({
-    queryKey: [MUSIC_QUERY_KEY_ENUM.USER_DETAIL, id],
+    queryKey: [MUSIC_QUERY_KEY_ENUM.ARTIST_DETAIL, id],
     queryFn: () => musicService.getUserDetail(id as string),
     enabled: id !== undefined,
     staleTime: 0,

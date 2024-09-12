@@ -2,15 +2,16 @@
 "use client";
 import FormMaster from "@/app/(private)/components/form-master";
 import UploadImage from "@/app/(private)/components/upload-image/UploadImage";
-import { validPhoneNumber } from "@/helpers/validate";
+import { validRequire } from "@/helpers/validate";
 import MUSIC_QUERY_KEY_ENUM from "@/services/music/keys";
 import musicService from "@/services/music/musicService";
 import UploadService from "@/services/upload/UploadService";
 import { UseMutateAsyncFunction, useMutation } from "@tanstack/react-query";
-import { Form, Input, Select } from "antd";
+import { Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
+import TextArea from "antd/es/input/TextArea";
 import { default as useUserDetailQuery } from "../../hooks/useUserDetailQuery";
-export interface AddEditUserProps {
+export interface AddEditGenresProps {
   type: any;
   id?: string;
   onClose?: () => void;
@@ -18,7 +19,7 @@ export interface AddEditUserProps {
   onAddSuccess: () => void;
 }
 
-const AddEditUser = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditUserProps) => {
+const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGenresProps) => {
   const { data: dataUser, isFetching } = useUserDetailQuery(id);
   const [form] = useForm();
   const { isPending: isUploadPending, mutateAsync: mutateUploadAsync } = useMutation({
@@ -33,7 +34,19 @@ const AddEditUser = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditUser
   const handleAdd = async (
     data: Record<string, any>,
     mutateAsync: UseMutateAsyncFunction<any, Error, any, unknown>
-  ) => {};
+  ) => {
+    try {
+      const currenFile = data?.urlImageFile?.file;
+      if (currenFile) {
+        const file = new FormData();
+        file.append("image", currenFile);
+        const response = await mutateUploadAsync(file);
+        data.urlImage = response?.data;
+        onClose?.();
+      }
+      await mutateAsync(data);
+    } catch (err) {}
+  };
 
   const handleUpdate = async (
     data: Record<string, any>,
@@ -59,20 +72,21 @@ const AddEditUser = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditUser
       form={form}
       type={type}
       isFetching={isFetching}
-      titleName="người dùng"
+      titleName="Thể loại nhạc"
       handleAdd={handleAdd}
       handleUpdate={handleUpdate}
-      queryKey={[MUSIC_QUERY_KEY_ENUM.USERS]}
-      queryDetailKey={[MUSIC_QUERY_KEY_ENUM.USER_DETAIL]}
-      mutationAddFn={async (data: any) => {}}
+      queryKey={[MUSIC_QUERY_KEY_ENUM.GENRES]}
+      queryDetailKey={[MUSIC_QUERY_KEY_ENUM.GENRES_DETAIL]}
+      mutationAddFn={async (data: any) => {
+        const response = await musicService.createGenre(data);
+        return response?.data;
+      }}
       mutationUpdateFn={async (data: any) => {
-        const response = await musicService.updateUser({
-          ...data,
-        });
+        const response = await musicService.updateGenre(data);
         return response?.data;
       }}
       components={{
-        addEditComponent: AddEditUser,
+        addEditComponent: AddEditGenres,
       }}
       id={id}
       initialDefaultValues={{}}
@@ -87,35 +101,19 @@ const AddEditUser = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditUser
     >
       <div className="flex flex-col gap-3">
         <div className="grid lg:grid-cols-2 gap-6">
-          <Form.Item name="userName" label="Tên Người dùng">
-            <Input
-              placeholder="Nhập tên người dùng"
-              maxLength={25}
-              readOnly={typeViewEdit}
-              disabled={type === "edit"}
-            />
+          <Form.Item name="name" rules={[validRequire()]} label="Tên thể loại">
+            <Input placeholder=" Nhập tên thể loại" maxLength={25} readOnly={typeViewEdit} disabled={type === "edit"} />
           </Form.Item>
           <div className="row-span-2">
             <p>Hình ảnh</p>
             <UploadImage readonly={typeView} form={form} nameUrl="urlImage" nameFile="urlImageFile" />
           </div>
-          <Form.Item name="email" label="Email">
-            <Input disabled={type === "edit"} readOnly={typeViewEdit} maxLength={255} />
-          </Form.Item>
-          <Form.Item name="phone" rules={[validPhoneNumber()]} label="Số điện thoại">
-            <Input placeholder="Nhập số điện thoại" readOnly={typeView} maxLength={255} />
-          </Form.Item>
-          <Form.Item name="status" label="Trạng thái">
-            <Select
-              options={[
-                { value: 1, label: "Đang hoạt động" },
-                { value: 0, label: "Khóa tài khoản" },
-              ]}
-            />
+          <Form.Item className="col-span-2" name="description" label="Nội dùng">
+            <TextArea rows={4} placeholder="Nhập đoạn văn ở đây" />
           </Form.Item>
         </div>
       </div>
     </FormMaster>
   );
 };
-export default AddEditUser;
+export default AddEditGenres;

@@ -28,13 +28,42 @@ class musicService {
       params,
     });
   }
+  static getArtists(params: any) {
+    return axiosInstance.get("/artist/v1", {
+      baseURL: API,
+      params,
+    });
+  }
+
   static getUserDetail(id: string) {
-    return axiosInstance.get(`/user/v1/profile`, {
+    return axiosInstance.get(`/user/v1/${id}`, {
       baseURL: API,
     });
   }
   static updateUser(data: any) {
     return axiosInstance.post(`/user/v1/${data?.id}`, data, {
+      baseURL: API,
+    });
+  }
+  // genres
+  static getGenres(params: any) {
+    return axiosInstance.get("/genre/v1", {
+      baseURL: API,
+      params,
+    });
+  }
+  static createGenre(data: any) {
+    return axiosInstance.post("/genre/v1", data, {
+      baseURL: API,
+    });
+  }
+  static getGenreDetail(id: string) {
+    return axiosInstance.get(`/genre/v1/${id}`, {
+      baseURL: API,
+    });
+  }
+  static updateGenre(data: any) {
+    return axiosInstance.post(`/genre/v1/${data?.id}`, data, {
       baseURL: API,
     });
   }

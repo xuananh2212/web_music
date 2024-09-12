@@ -1,11 +1,15 @@
 import { TableProps, Tooltip } from "antd";
 import { EditPencil, Eye, Trash } from "iconoir-react";
 import { cloneDeep } from "lodash";
-import { TableMasterProps } from "../../table-master";
+import { FormType, TableMasterProps } from "../../table-master";
 import HeaderCell from "../components/header-cell/HeaderCell";
 import { TableBaseProps } from "../types";
 
-export const addActionColumns = (defaultColumns: Array<any>, onAction: TableMasterProps["onAction"]) => {
+export const addActionColumns = (
+  defaultColumns: Array<any>,
+  onAction: TableMasterProps["onAction"],
+  listAction?: FormType[]
+) => {
   const actionColumns = [
     {
       title: "view",
@@ -56,13 +60,15 @@ export const addActionColumns = (defaultColumns: Array<any>, onAction: TableMast
           <div className="flex justify-center gap-4">
             {actionColumns.map((value) => {
               return (
-                <div
-                  key={value.key}
-                  className="cursor-pointer flex justify-center"
-                  onClick={() => value.onClick(record)}
-                >
-                  {value.icon}
-                </div>
+                listAction?.includes(value?.key as FormType) && (
+                  <div
+                    key={value.key}
+                    className="cursor-pointer flex justify-center"
+                    onClick={() => value.onClick(record)}
+                  >
+                    {value.icon}
+                  </div>
+                )
               );
             })}
           </div>

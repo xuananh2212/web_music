@@ -18,6 +18,7 @@ export default async function authMiddleware({ nextUrl, cookies, domain }: Param
 
   // Extract the subdomain from the JWT payload
   const subDomain = getPayloadJwt(accessToken.value)?.domain || "app";
+  console.log("subDomain", subDomain);
 
   // If no tokens are present, redirect to login for non-auth routes
   if (!accessToken?.value && !refreshToken?.value) {

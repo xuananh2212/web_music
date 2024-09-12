@@ -1,11 +1,10 @@
 "use client";
-
-import cookie from "@/apis/cookies";
 import { CookieInterface } from "@/apis/cookies/utils/setCookie";
 import { LOCALE_STORAGE_KEYS } from "@/helpers/common.constant";
 import { LoginReq } from "@/services/music";
 import musicService from "@/services/music/musicService";
 import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 import moment from "moment";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
@@ -32,7 +31,6 @@ const useMutationLogin = () => {
     ...useMutation<any, any, LoginReq>({
       mutationFn: async (values: LoginReq) => {
         const response = await musicService.login(values);
-        const role = response.data.user?.role;
         const accessToken = response?.data?.access_token;
         const refreshToken = response?.data?.refresh_token;
         const cookies: CookieInterface[] = [
@@ -42,6 +40,7 @@ const useMutationLogin = () => {
             expire: moment().add(1, "day").toDate(),
           },
         ];
+        Cookies.set("access_token", accessToken, { expires: moment()?.add(1, "day")?.toDate() });
         if (values.isSave) {
           localStorage.setItem(
             LOCALE_STORAGE_KEYS.SAVE_ACCOUNT_INFO,
@@ -52,15 +51,17 @@ const useMutationLogin = () => {
               })
             )
           );
-          cookies.push({
-            name: "refresh_token",
-            value: refreshToken.token,
-            expire: moment(refreshToken.expires).toDate(),
-          });
+          // cookies.push({
+          //   name: "refresh_token",
+          //   value: refreshToken.token,
+          //   expire: moment(refreshToken.expires).toDate(),
+          // });
+          Cookies.set("refresh_token", refreshToken, { expires: moment()?.add(2, "day")?.toDate() });
         } else {
           localStorage.removeItem(LOCALE_STORAGE_KEYS.SAVE_ACCOUNT_INFO);
         }
-        await cookie.set(cookies);
+
+        // console.log("cookies", cookies);
         router.push(next || "/dashboard");
         return response;
       },

@@ -102,6 +102,9 @@ const AddEditUser = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditUser
           <Form.Item name="email" label="Email">
             <Input disabled={type === "edit"} readOnly={typeViewEdit} maxLength={255} />
           </Form.Item>
+          <Form.Item name="stageName" rules={[validPhoneNumber()]} label="Biệt danh">
+            <Input placeholder="Nhập Biệt danh" readOnly={typeView} maxLength={255} />
+          </Form.Item>
           <Form.Item name="phone" rules={[validPhoneNumber()]} label="Số điện thoại">
             <Input placeholder="Nhập số điện thoại" readOnly={typeView} maxLength={255} />
           </Form.Item>

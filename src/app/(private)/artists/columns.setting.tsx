@@ -6,12 +6,20 @@ const convertStatus = (value: any) => {
 };
 export const USER_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
   {
-    title: "Tên người dùng",
+    title: "Tên Tài khoản nghệ sĩ",
     dataIndex: "user_name",
     fixed: "left",
     ellipsis: true,
     width: 200,
     isSort: true,
+    isFilter: true,
+  },
+  {
+    title: "Biệt danh",
+    dataIndex: "stage_name",
+    width: 200,
+    isSort: true,
+    isDrag: true,
     isFilter: true,
   },
   {

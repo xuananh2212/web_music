@@ -90,14 +90,14 @@ const CustomForm = ({
       >
         <div className="max-h-[calc(100vh-200px)] overflow-auto">{children}</div>
         <div className="flex justify-end gap-3 mt-6 -mb-1">
-          <Button loading={loading} type={isHaveSaveAndAddNew ? "default" : "primary"} onClick={handleSave}>
+          <Button loading={loading} type={"primary"} onClick={handleSave}>
             {confirmLabel}
           </Button>
-          {isHaveSaveAndAddNew && (
+          {/* {isHaveSaveAndAddNew && (
             <Button loading={loading} type="primary" onClick={handleSaveAndAdd}>
               Lưu và Thêm
             </Button>
-          )}
+          )} */}
         </div>
       </Form>
     </div>
