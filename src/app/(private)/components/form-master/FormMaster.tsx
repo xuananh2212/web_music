@@ -84,6 +84,7 @@ const FormMaster = ({
       });
       queryClient.invalidateQueries({
         queryKey: [...queryDetailKey, id],
+        refetchType: "none",
       });
     },
   });

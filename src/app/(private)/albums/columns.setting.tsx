@@ -4,7 +4,7 @@ import { Image, Tag } from "antd";
 const convertStatus = (value: any) => {
   return <Tag color={value === 1 ? "blue" : "red"}>{value === 1 ? "Đang hoạt động" : "Tài khoản bị khóa"}</Tag>;
 };
-export const GENRES_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
+export const ALBUM_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
   {
     title: "Id",
     dataIndex: "id",
@@ -14,13 +14,18 @@ export const GENRES_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     isSort: true,
   },
   {
-    title: "Thể loại nhạc",
-    dataIndex: "name",
-    fixed: "left",
+    title: "Tên album",
+    dataIndex: "title",
     ellipsis: true,
     width: 200,
     isSort: true,
-    isFilter: true,
+  },
+  {
+    title: "Nghệ sĩ",
+    dataIndex: "artist_name",
+    ellipsis: true,
+    width: 200,
+    isSort: true,
   },
   {
     title: "Hình ảnh",
@@ -28,19 +33,17 @@ export const GENRES_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     width: 200,
     isSort: true,
     isDrag: true,
-    isFilter: true,
     render: (value: string) => {
       return value && <Image width={35} height={35} src={value} />;
     },
   },
   {
-    title: "Nội dung",
-    dataIndex: "description",
+    title: "Ngày phát hành",
+    dataIndex: "release_date",
     width: 200,
     ellipsis: true,
     isSort: true,
     isDrag: true,
-    isFilter: true,
   },
   {
     title: "Thời gian tạo",
@@ -52,8 +55,6 @@ export const GENRES_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     },
     ellipsis: true,
     isDrag: true,
-    isFilter: true,
-    hidden: true,
   },
   {
     title: "Lịch sử cập nhập",
@@ -65,7 +66,5 @@ export const GENRES_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     },
     ellipsis: true,
     isDrag: true,
-    isFilter: true,
-    hidden: true,
   },
 ];

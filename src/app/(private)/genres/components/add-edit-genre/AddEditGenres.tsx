@@ -10,7 +10,7 @@ import { UseMutateAsyncFunction, useMutation } from "@tanstack/react-query";
 import { Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
 import TextArea from "antd/es/input/TextArea";
-import { default as useUserDetailQuery } from "../../hooks/useUserDetailQuery";
+import useGenreDetailQuery from "../../hooks/useGenreDetailQuery";
 export interface AddEditGenresProps {
   type: any;
   id?: string;
@@ -20,7 +20,7 @@ export interface AddEditGenresProps {
 }
 
 const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGenresProps) => {
-  const { data: dataUser, isFetching } = useUserDetailQuery(id);
+  const { data: dataGenre, isFetching } = useGenreDetailQuery(id);
   const [form] = useForm();
   const { isPending: isUploadPending, mutateAsync: mutateUploadAsync } = useMutation({
     mutationFn: async (file: FormData) => {
@@ -91,9 +91,10 @@ const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGe
       id={id}
       initialDefaultValues={{}}
       dataEdit={{
-        ...dataUser?.data?.data,
-        userName: dataUser?.data?.data?.data_name,
-        urlImage: dataUser?.data?.data?.url_image,
+        ...dataGenre?.data?.data,
+        userName: dataGenre?.data?.data?.data_name,
+        urlImage: dataGenre?.data?.data?.image_url,
+        desc: dataGenre?.data?.data?.description,
       }}
       minWidth={700}
       onAddSuccess={onAddSuccess}
@@ -102,13 +103,13 @@ const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGe
       <div className="flex flex-col gap-3">
         <div className="grid lg:grid-cols-2 gap-6">
           <Form.Item name="name" rules={[validRequire()]} label="Tên thể loại">
-            <Input placeholder=" Nhập tên thể loại" maxLength={25} readOnly={typeViewEdit} disabled={type === "edit"} />
+            <Input placeholder=" Nhập tên thể loại" maxLength={25} readOnly={typeView} />
           </Form.Item>
           <div className="row-span-2">
             <p>Hình ảnh</p>
             <UploadImage readonly={typeView} form={form} nameUrl="urlImage" nameFile="urlImageFile" />
           </div>
-          <Form.Item className="col-span-2" name="description" label="Nội dùng">
+          <Form.Item className="col-span-2" name="desc" label="Nội dùng">
             <TextArea rows={4} placeholder="Nhập đoạn văn ở đây" />
           </Form.Item>
         </div>

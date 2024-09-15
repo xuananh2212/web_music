@@ -62,8 +62,40 @@ class musicService {
       baseURL: API,
     });
   }
+  static deleteGenre(id: string) {
+    return axiosInstance.delete(`/genre/v1/${id}`, {
+      baseURL: API,
+    });
+  }
   static updateGenre(data: any) {
     return axiosInstance.post(`/genre/v1/${data?.id}`, data, {
+      baseURL: API,
+    });
+  }
+  // ablum
+  static getAlbums(params: any) {
+    return axiosInstance.get("/album/v1", {
+      baseURL: API,
+      params,
+    });
+  }
+  static createAlbum(data: any) {
+    return axiosInstance.post("/album/v1", data, {
+      baseURL: API,
+    });
+  }
+  static getAlbumDetail(id: string) {
+    return axiosInstance.get(`/album/v1/${id}`, {
+      baseURL: API,
+    });
+  }
+  static deleteAlbum(id: string) {
+    return axiosInstance.delete(`/album/v1/${id}`, {
+      baseURL: API,
+    });
+  }
+  static updateAlbum(data: any) {
+    return axiosInstance.post(`/album/v1/${data?.id}`, data, {
       baseURL: API,
     });
   }

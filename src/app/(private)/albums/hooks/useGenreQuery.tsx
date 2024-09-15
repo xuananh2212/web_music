@@ -9,8 +9,8 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import getActionBar from "../../components/table-bar/common/getActionBar";
 import { TableBaseProps } from "../../components/table-base";
-import { GENRES_LIST_DEFAULT_COLUMNS } from "../columns.setting";
-import AddEditGenres from "../components/add-edit-genre/AddEditGenres";
+import { ALBUM_LIST_DEFAULT_COLUMNS } from "../columns.setting";
+import AddEditGenres from "../components/add-edit-album/AddEditAlbum";
 
 const formatData = (data: any) => {
   return {
@@ -63,16 +63,16 @@ const useGenreQuery: BaseQueryTable = () => {
   };
   const listAction: FormType[] = ["view", "edit", "delete"];
   const { isPending, refetch, data } = useQuery({
-    queryKey: [MUSIC_QUERY_KEY_ENUM.GENRES, queryParams],
+    queryKey: [MUSIC_QUERY_KEY_ENUM.ALBUMS, queryParams],
     queryFn: async () => {
-      const response = await musicService.getGenres(queryParams);
+      const response = await musicService.getAlbums(queryParams);
       return formatData(response?.data);
     },
     placeholderData: (prev) => prev,
   });
 
   const [columns, setColumns] = useState<TableBaseProps["columns"]>(
-    addActionColumns(GENRES_LIST_DEFAULT_COLUMNS, onAction, listAction)
+    addActionColumns(ALBUM_LIST_DEFAULT_COLUMNS, onAction, listAction)
   );
 
   const actionsBar: TableMasterProps["actionsBar"] = useMemo(
@@ -93,7 +93,7 @@ const useGenreQuery: BaseQueryTable = () => {
     onChangeColumns: setColumns,
     actionsBar,
     queryParams,
-    defaultColumns: GENRES_LIST_DEFAULT_COLUMNS,
+    defaultColumns: ALBUM_LIST_DEFAULT_COLUMNS,
     onChangeQueryParams: setQueryParams,
     onAction,
   };

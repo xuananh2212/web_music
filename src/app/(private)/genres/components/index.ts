@@ -1,2 +1,2 @@
+export { default } from "./add-edit-genre/AddEditGenres.jsx";
 export * from "./AddEditDepartment";
-export { default } from "./add-edit-user/AddEditGenres.jsx";

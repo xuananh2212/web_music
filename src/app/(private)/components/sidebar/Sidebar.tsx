@@ -23,7 +23,7 @@ const Sidebar = () => {
     [pathName]
   );
   return (
-    <div id="sidebar" className={clsx(styles.root, isOpen ? "w-60" : "w-[70px] bg-color-500")}>
+    <div id="sidebar" className={clsx(styles.root, isOpen ? "w-60" : "w-[70px]")}>
       <div
         id="toggle-sidebar"
         className={clsx(
