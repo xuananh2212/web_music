@@ -140,7 +140,7 @@ export function formatDate(dateString: string, format: string = "YYYY-MM-DD"): s
   }
 }
 export function formatDateTime(dateString: string): string {
-  return formatDate(dateString, "DD-MM-YYYY hh:mm:ss");
+  return dateString && formatDate(dateString, "DD-MM-YYYY hh:mm:ss");
 }
 export function isDateValidCompareToday(dateString?: string): boolean {
   if (!dateString) {

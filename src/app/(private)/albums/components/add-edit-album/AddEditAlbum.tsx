@@ -10,7 +10,8 @@ import UploadService from "@/services/upload/UploadService";
 import { UseMutateAsyncFunction, useMutation } from "@tanstack/react-query";
 import { DatePicker, Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
-import useGenreDetailQuery from "../../hooks/useGenreDetailQuery";
+import dayjs from "dayjs";
+import useAlbumDetailQuery from "../../hooks/useAlbumDetailQuery";
 export interface AddEditAlbumProps {
   type: any;
   id?: string;
@@ -19,7 +20,7 @@ export interface AddEditAlbumProps {
 }
 
 const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) => {
-  const { data: dataGenre, isFetching } = useGenreDetailQuery(id);
+  const { data: dataAlbum, isFetching } = useAlbumDetailQuery(id);
   const [form] = useForm();
   const { isPending: isUploadPending, mutateAsync: mutateUploadAsync } = useMutation({
     mutationFn: async (file: FormData) => {
@@ -35,7 +36,6 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
     mutateAsync: UseMutateAsyncFunction<any, Error, any, unknown>
   ) => {
     try {
-      console.log("data", data);
       const currenFile = data?.urlImageFile?.file;
       if (currenFile) {
         const file = new FormData();
@@ -60,7 +60,12 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
         const response = await mutateUploadAsync(file);
         data.urlImage = response?.data;
       }
-      const sendData = { ...data, id };
+      const sendData = {
+        ...data,
+        id,
+        releaseDate: data?.releaseDate && data.releaseDate.toISOString(),
+        artistId: data?.artist?.value,
+      };
       await mutateAsyncUpdate(sendData);
       form.resetFields();
       onClose?.();
@@ -72,7 +77,7 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
       form={form}
       type={type}
       isFetching={isFetching}
-      titleName="Thể loại nhạc"
+      titleName="Album"
       handleAdd={handleAdd}
       handleUpdate={handleUpdate}
       queryKey={[MUSIC_QUERY_KEY_ENUM.ALBUMS]}
@@ -91,10 +96,16 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
       id={id}
       initialDefaultValues={{}}
       dataEdit={{
-        ...dataGenre?.data?.data,
-        userName: dataGenre?.data?.data?.data_name,
-        urlImage: dataGenre?.data?.data?.image_url,
-        desc: dataGenre?.data?.data?.description,
+        ...dataAlbum?.data?.data,
+        userName: dataAlbum?.data?.data?.data_name,
+        urlImage: dataAlbum?.data?.data?.image_url,
+        artist: {
+          value: dataAlbum?.data?.data?.artist_id,
+          label: dataAlbum?.data?.data?.Artist?.stage_name,
+        },
+        releaseDate: dataAlbum?.data?.data?.release_date
+          ? dayjs(dataAlbum?.data?.data?.release_date)
+          : dataAlbum?.data?.data?.release_date,
       }}
       minWidth={700}
       onAddSuccess={onAddSuccess}
@@ -132,7 +143,7 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
             readOnly={typeView}
           />
           <Form.Item name="releaseDate" label="Ngày phát hành">
-            <DatePicker />
+            <DatePicker format={"DD/MM/YYYY"} />
           </Form.Item>
         </div>
       </div>

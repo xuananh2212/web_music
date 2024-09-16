@@ -44,6 +44,7 @@ export const ALBUM_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     ellipsis: true,
     isSort: true,
     isDrag: true,
+    render: formatDateTime,
   },
   {
     title: "Thời gian tạo",

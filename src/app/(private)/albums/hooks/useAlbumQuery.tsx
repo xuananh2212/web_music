@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import getActionBar from "../../components/table-bar/common/getActionBar";
 import { TableBaseProps } from "../../components/table-base";
 import { ALBUM_LIST_DEFAULT_COLUMNS } from "../columns.setting";
-import AddEditGenres from "../components/add-edit-album/AddEditAlbum";
+import AddEditAlbum from "../components/add-edit-album/AddEditAlbum";
 
 const formatData = (data: any) => {
   return {
@@ -24,18 +24,18 @@ const formatData = (data: any) => {
   };
 };
 
-const useGenreQuery: BaseQueryTable = () => {
+const useAlbumQuery: BaseQueryTable = () => {
   const initialQueryParams = { keyword: "" };
   const queryClient = useQueryClient();
   const [queryParams, setQueryParams] = useState<any>(initialQueryParams);
   const { isPending: isPendingDelete, mutateAsync: mutateDeleteAsync } = useMutation({
     mutationFn: async (id: string) => {
-      return musicService.deleteGenre(id);
+      return musicService.deleteAlbum(id);
     },
     onSuccess: () => {
       toast.success("Xóa thành công");
       queryClient.invalidateQueries({
-        queryKey: [MUSIC_QUERY_KEY_ENUM.GENRES],
+        queryKey: [MUSIC_QUERY_KEY_ENUM.ALBUMS],
       });
     },
   });
@@ -45,7 +45,7 @@ const useGenreQuery: BaseQueryTable = () => {
         return mutateDeleteAsync(value.id);
       });
     } else {
-      openModal(AddEditGenres, {
+      openModal(AddEditAlbum, {
         type,
         id: value?.id,
         onAddSuccess: () => {
@@ -99,4 +99,4 @@ const useGenreQuery: BaseQueryTable = () => {
   };
 };
 
-export default useGenreQuery;
+export default useAlbumQuery;

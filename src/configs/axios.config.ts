@@ -1,4 +1,3 @@
-import cookie from "@/apis/cookies";
 import { deepTrimObject } from "@/helpers/object";
 import musicService from "@/services/music/musicService";
 import "axios";
@@ -77,23 +76,23 @@ axiosInstance.interceptors.response.use(
     if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      try {
-        // Refresh token
-        const refreshedToken = await getRefreshToken();
+      // try {
+      //   // Refresh token
+      //   const refreshedToken = await getRefreshToken();
 
-        // Update authorization header with new token
-        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${refreshedToken.accessToken}`;
+      //   // Update authorization header with new token
+      //   axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${refreshedToken.accessToken}`;
 
-        // Retry original request
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        await Promise.all([cookie.del("access_token"), cookie.del("refresh_token")]);
-        toast.info("Phiên làm việc đã kết thúc. Vui lòng đăng nhập lại!");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 3000);
-        return refreshError;
-      }
+      //   // Retry original request
+      //   return axiosInstance(originalRequest);
+      // } catch (refreshError) {
+      //   await Promise.all([cookie.del("access_token"), cookie.del("refresh_token")]);
+      //   toast.info("Phiên làm việc đã kết thúc. Vui lòng đăng nhập lại!");
+      //   setTimeout(() => {
+      //     window.location.href = "/login";
+      //   }, 3000);
+      //   return refreshError;
+      // }
     }
     throw error?.response;
   }

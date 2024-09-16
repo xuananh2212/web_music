@@ -1,10 +1,10 @@
 "use client";
 
 import TableMaster from "@/app/(private)/components/table-master/TableMaster";
-import useGenreQuery from "./hooks/useGenreQuery";
+import useAlbumQuery from "./hooks/useAlbumQuery";
 
 const Page = () => {
-  const queryData = useGenreQuery();
+  const queryData = useAlbumQuery();
   return <TableMaster title="Danh sách Albums" {...queryData} />;
 };
 
