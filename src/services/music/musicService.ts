@@ -99,6 +99,34 @@ class musicService {
       baseURL: API,
     });
   }
+
+  // SONGS
+  static getSongs(params: any) {
+    return axiosInstance.get("/song/v1", {
+      baseURL: API,
+      params,
+    });
+  }
+  static createSong(data: any) {
+    return axiosInstance.post("/song/v1", data, {
+      baseURL: API,
+    });
+  }
+  static getSongDetail(id: string) {
+    return axiosInstance.get(`/song/v1/${id}`, {
+      baseURL: API,
+    });
+  }
+  static deleteSong(id: string) {
+    return axiosInstance.delete(`/song/v1/${id}`, {
+      baseURL: API,
+    });
+  }
+  static updateSong(data: any) {
+    return axiosInstance.post(`/song/v1/${data?.id}`, data, {
+      baseURL: API,
+    });
+  }
 }
 
 export default musicService;

@@ -177,3 +177,41 @@ export const validateImage = (file: File | null, name: string) => {
 
   return { isValid: true, errorType: "", errorMessage: "" };
 };
+export const validateFile = (file: File, fileType: "image" | "audio" | "video") => {
+  let isValid = true;
+  let errorMessage = "";
+
+  // Validate file type
+  if (fileType === "image") {
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      isValid = false;
+      errorMessage = "File phải là ảnh (jpg, png, gif, etc.)";
+      return { isValid, errorType: "image", errorMessage };
+    }
+  } else if (fileType === "audio") {
+    const isAudio = file.type === "audio/mpeg";
+    if (!isAudio) {
+      isValid = false;
+      errorMessage = "File phải là nhạc MP3";
+      return { isValid, errorType: "audio", errorMessage };
+    }
+  } else if (fileType === "video") {
+    const isVideo = file.type === "video/mp4";
+    if (!isVideo) {
+      isValid = false;
+      errorMessage = "File phải là video MP4";
+      return { isValid, errorType: "video", errorMessage };
+    }
+  }
+
+  // Validate file size
+  const isLessThan50MB = file.size / 1024 / 1024 < 50;
+  if (!isLessThan50MB) {
+    isValid = false;
+    errorMessage = "File phải nhỏ hơn 50MB";
+    return { isValid, errorType: "size", errorMessage };
+  }
+
+  return { isValid, errorType: null, errorMessage: "" };
+};
