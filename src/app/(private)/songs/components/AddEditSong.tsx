@@ -8,7 +8,7 @@ import MUSIC_QUERY_KEY_ENUM from "@/services/music/keys";
 import musicService from "@/services/music/musicService";
 import UploadService from "@/services/upload/UploadService";
 import { UseMutateAsyncFunction, useMutation } from "@tanstack/react-query";
-import { Form, Input } from "antd";
+import { DatePicker, Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
 import TextArea from "antd/lib/input/TextArea";
 import dayjs from "dayjs";
@@ -30,6 +30,12 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
       return response?.data;
     },
   });
+  const { isPending: isUploadFileVideoPending, mutateAsync: mutateUploadFileVideoAsync } = useMutation({
+    mutationFn: async (file: FormData) => {
+      const response = await UploadService.uploadFileVideo(file);
+      return response?.data;
+    },
+  });
   const typeViewEdit = type === "edit" || type === "view";
   const typeView = type === "view";
 
@@ -38,16 +44,36 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
     mutateAsync: UseMutateAsyncFunction<any, Error, any, unknown>
   ) => {
     try {
+      console.log("data", data);
       const currenFile = data?.urlImageFile?.file;
+      const fileMusic = data?.fileMp3File?.file;
+      const fileVideoFile = data?.fileVideoFile?.file;
       if (currenFile) {
         const file = new FormData();
         file.append("image", currenFile);
         const response = await mutateUploadAsync(file);
         data.urlImage = response?.data;
-        onClose?.();
       }
-      await mutateAsync({ ...data, releaseDate: data.releaseDate?.toISOString(), artistId: data?.artist?.value });
+      if (fileMusic) {
+        const file = new FormData();
+        file.append("file", fileMusic);
+        const response = await mutateUploadFileVideoAsync(file);
+        data.fileUrl = response?.data;
+      }
+      if (fileVideoFile) {
+        const file = new FormData();
+        file.append("file", fileVideoFile);
+        const response = await mutateUploadFileVideoAsync(file);
+        data.videoUrl = response?.data;
+      }
+      await mutateAsync({
+        ...data,
+        releaseDate: data.releaseDate?.toISOString(),
+        artistId: data?.artist?.value,
+        albumId: data?.album?.value,
+      });
     } catch (err) {}
+    onClose?.();
   };
 
   const handleUpdate = async (
@@ -79,17 +105,17 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
       form={form}
       type={type}
       isFetching={isFetching}
-      titleName="Album"
+      titleName="Bài hát"
       handleAdd={handleAdd}
       handleUpdate={handleUpdate}
       queryKey={[MUSIC_QUERY_KEY_ENUM.ALBUMS]}
       queryDetailKey={[MUSIC_QUERY_KEY_ENUM.ALBUM_DETAIL]}
       mutationAddFn={async (data: any) => {
-        const response = await musicService.createAlbum(data);
+        const response = await musicService.createSong(data);
         return response?.data;
       }}
       mutationUpdateFn={async (data: any) => {
-        const response = await musicService.updateAlbum(data);
+        const response = await musicService.updateSong(data);
         return response?.data;
       }}
       components={{
@@ -109,73 +135,75 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
           ? dayjs(dataAlbum?.data?.data?.release_date)
           : dataAlbum?.data?.data?.release_date,
       }}
-      minWidth={700}
+      minWidth={1100}
       onAddSuccess={onAddSuccess}
       onClose={onClose}
     >
-      <div className="flex flex-col gap-3">
-        <div className="grid lg:grid-cols-2 gap-6">
-          <Form.Item name="title" rules={[validRequire()]} label="Tên bài hát">
-            <Input placeholder=" Nhập Tên bài hát" maxLength={25} readOnly={typeView} />
-          </Form.Item>
-          <div className="row-span-2">
-            <UploadImage readonly={typeView} form={form} nameUrl="urlImage" nameFile="urlImageFile" />
-          </div>
-          <div className="col-span-2">
-            <UploadFile form={form} nameUrl="file_url" nameFile="fileMp3File" label="Tải file nhạc" fileType="audio" />
-          </div>
+      <div className="grid lg:grid-cols-4 gap-6">
+        <Form.Item name="title" rules={[validRequire()]} label="Tên bài hát">
+          <Input placeholder=" Nhập Tên bài hát" maxLength={25} readOnly={typeView} />
+        </Form.Item>
+        <CustomTreeSelect
+          label="Thể loại"
+          treeNodeLabelProp="name"
+          rules={[validRequire()]}
+          header={[
+            {
+              id: "Id",
+            },
+            {
+              name: "Tên thể loại",
+            },
+          ]}
+          name="genre"
+          placeholder={!typeView ? "Chọn Thể loại" : ""}
+          onLoadData={async (queryParams) => {
+            const response: any = await musicService.getGenres(queryParams);
+            return response?.data?.data;
+          }}
+          allowClear
+          readOnly={typeView}
+        />
+        <CustomTreeSelect
+          label="Album"
+          treeNodeLabelProp="name"
+          rules={[validRequire()]}
+          header={[
+            {
+              id: "Id",
+            },
+            {
+              name: "Tên album",
+            },
+          ]}
+          name="album"
+          placeholder={!typeView ? "Chọn Album" : ""}
+          onLoadData={async (queryParams) => {
+            const response: any = await musicService.getAlbums(queryParams);
+            return (
+              response?.data?.data?.length && response?.data?.data.map((data: any) => ({ ...data, name: data?.title }))
+            );
+          }}
+          allowClear
+          readOnly={typeView}
+        />
+        <Form.Item name="releaseDate" label="Ngày phát hành bài nhạc">
+          <DatePicker format="DD/MM/YYYY" />
+        </Form.Item>
+        <div className="row-span-2 col-span-2">
+          <UploadImage label="Hình ảnh" readonly={typeView} form={form} nameUrl="urlImage" nameFile="urlImageFile" />
+        </div>
+        <div className="row-span-2 col-span-2">
+          <UploadFile form={form} nameUrl="file_url" nameFile="fileMp3File" label="Tải file nhạc" fileType="audio" />
+        </div>
 
-          <div className="row-span-2 col-span-2">
-            <UploadFile form={form} nameUrl="video_url" nameFile="fileVideoFile" label="Tải video" fileType="video" />
-          </div>
+        <div className="row-span-2 col-span-2">
+          <UploadFile form={form} nameUrl="video_url" nameFile="fileVideoFile" label="Tải video" fileType="video" />
+        </div>
 
-          <CustomTreeSelect
-            label="Thể loại"
-            treeNodeLabelProp="name"
-            rules={[validRequire()]}
-            header={[
-              {
-                id: "Id",
-              },
-              {
-                name: "Tên thể loại",
-              },
-            ]}
-            name="artist"
-            placeholder={!typeView ? "Chọn Thể loại" : ""}
-            onLoadData={async (queryParams) => {
-              const response: any = await musicService.getGenres(queryParams);
-              return response?.data?.data;
-            }}
-            allowClear
-            readOnly={typeView}
-          />
-          <CustomTreeSelect
-            label="Album"
-            treeNodeLabelProp="title"
-            rules={[validRequire()]}
-            header={[
-              {
-                id: "Id",
-              },
-              {
-                title: "Tên album",
-              },
-            ]}
-            name="artist"
-            placeholder={!typeView ? "Chọn Album" : ""}
-            onLoadData={async (queryParams) => {
-              const response: any = await musicService.getAlbums(queryParams);
-              return response?.data?.data;
-            }}
-            allowClear
-            readOnly={typeView}
-          />
-          <Form.Item name="lyrics" label="Lời bài hát">
-            <TextArea />
-          </Form.Item>
-          <Form.Item name="releaseDate" label="Ngày phát hành bài nhạc">
-            <TextArea />
+        <div className="row-span-2 col-span-2">
+          <Form.Item className="h-full" name="lyrics" label="Lời bài hát">
+            <TextArea className="h-full" rows={7} />
           </Form.Item>
         </div>
       </div>

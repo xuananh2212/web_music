@@ -143,6 +143,9 @@ const FormMaster = ({
       maskClosable={false}
       closable={false}
       className={clsx(`min-w-[${minWidth}px]`)}
+      style={{
+        minWidth,
+      }}
       centered
       open
       onCancel={handleCancel}

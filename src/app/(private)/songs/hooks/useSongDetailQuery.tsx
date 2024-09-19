@@ -4,8 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 
 const useSongDetailQuery = (id: string | undefined) => {
   return useQuery({
-    queryKey: [MUSIC_QUERY_KEY_ENUM.SONGS, id],
-    queryFn: () => musicService.getAlbumDetail(id as string),
+    queryKey: [MUSIC_QUERY_KEY_ENUM.SONG_DETAIL, id],
+    queryFn: () => musicService.getSongDetail(id as string),
     enabled: id !== undefined,
     staleTime: 0,
   });

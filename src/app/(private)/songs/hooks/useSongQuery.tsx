@@ -9,7 +9,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import getActionBar from "../../components/table-bar/common/getActionBar";
 import { TableBaseProps } from "../../components/table-base";
-import { ALBUM_LIST_DEFAULT_COLUMNS } from "../columns.setting";
+import { SONG_DEFAULT_COLUMNS } from "../columns.setting";
 import AddEditSong from "../components/AddEditSong";
 
 const formatData = (data: any) => {
@@ -65,14 +65,14 @@ const useAlbumQuery: BaseQueryTable = () => {
   const { isPending, refetch, data } = useQuery({
     queryKey: [MUSIC_QUERY_KEY_ENUM.ALBUMS, queryParams],
     queryFn: async () => {
-      const response = await musicService.getAlbums(queryParams);
+      const response = await musicService.getSongs(queryParams);
       return formatData(response?.data);
     },
     placeholderData: (prev) => prev,
   });
 
   const [columns, setColumns] = useState<TableBaseProps["columns"]>(
-    addActionColumns(ALBUM_LIST_DEFAULT_COLUMNS, onAction, listAction)
+    addActionColumns(SONG_DEFAULT_COLUMNS, onAction, listAction)
   );
 
   const actionsBar: TableMasterProps["actionsBar"] = useMemo(
@@ -93,7 +93,7 @@ const useAlbumQuery: BaseQueryTable = () => {
     onChangeColumns: setColumns,
     actionsBar,
     queryParams,
-    defaultColumns: ALBUM_LIST_DEFAULT_COLUMNS,
+    defaultColumns: SONG_DEFAULT_COLUMNS,
     onChangeQueryParams: setQueryParams,
     onAction,
   };

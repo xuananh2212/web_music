@@ -1,7 +1,7 @@
 "use client";
 
 import TableMaster from "@/app/(private)/components/table-master/TableMaster";
-import useAlbumQuery from "./hooks/useAlbumQuery";
+import useAlbumQuery from "./hooks/useSongQuery";
 
 const Page = () => {
   const queryData = useAlbumQuery();

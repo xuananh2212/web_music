@@ -16,6 +16,15 @@ class UploadService {
       baseURL: API,
     });
   }
+  static uploadFileVideo(file: any) {
+    return axiosInstance.post("/upload/v1/video", file, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      allowSpacing: true,
+      baseURL: API,
+    });
+  }
   static uploadTemp(file: any) {
     return axiosInstance.post("file/upload-temp", file, {
       headers: {
