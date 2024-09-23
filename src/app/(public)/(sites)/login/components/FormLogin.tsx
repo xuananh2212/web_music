@@ -2,7 +2,7 @@
 
 import BoxLogo from "@/app/(public)/components/BoxLogo";
 import CustomCard from "@/app/(public)/components/CustomCard";
-import { validRequire } from "@/helpers/validate";
+import { validEmail, validRequire } from "@/helpers/validate";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Eye, EyeClosed, Lock, Mail } from "iconoir-react";
 import Image from "next/image";
@@ -20,7 +20,7 @@ const FormLogin = () => {
           <h2 className="text-sm">Đăng nhập</h2>
         </div>
         <div className="w-full flex flex-col gap-5">
-          <Form.Item validateFirst name="userName" rules={[validRequire()]}>
+          <Form.Item validateFirst name="email" rules={[validRequire(), validEmail()]}>
             <Input autoFocus prefix={<Mail width={16} className="text-color-500" />} placeholder="Nhập tên tài khoản" />
           </Form.Item>
           <Form.Item name="password" rules={[validRequire()]}>

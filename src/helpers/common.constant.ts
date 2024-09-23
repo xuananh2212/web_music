@@ -3,6 +3,7 @@ export enum LOCALE_STORAGE_KEYS {
   SAVE_ACCOUNT_INFO = "saf",
   TABLE_CONFIG = "table-config",
 }
+export const URL_IMAGE = "http://localhost:3000";
 
 export enum TYPE_EXPORT {
   XLSX = "xlsx",

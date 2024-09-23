@@ -2,6 +2,7 @@
 "use client";
 import FormMaster from "@/app/(private)/components/form-master";
 import UploadImage from "@/app/(private)/components/upload-image/UploadImage";
+import { URL_IMAGE } from "@/helpers/common.constant";
 import { validRequire } from "@/helpers/validate";
 import MUSIC_QUERY_KEY_ENUM from "@/services/music/keys";
 import musicService from "@/services/music/musicService";
@@ -24,7 +25,7 @@ const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGe
   const [form] = useForm();
   const { isPending: isUploadPending, mutateAsync: mutateUploadAsync } = useMutation({
     mutationFn: async (file: FormData) => {
-      const response = await UploadService.uploadImage(file);
+      const response = await UploadService.uploadFileVideo(file);
       return response?.data;
     },
   });
@@ -39,9 +40,9 @@ const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGe
       const currenFile = data?.urlImageFile?.file;
       if (currenFile) {
         const file = new FormData();
-        file.append("image", currenFile);
+        file.append("file", currenFile);
         const response = await mutateUploadAsync(file);
-        data.urlImage = response?.data;
+        data.urlImage = `${URL_IMAGE}${response?.filePath}`;
         onClose?.();
       }
       await mutateAsync(data);
@@ -56,9 +57,9 @@ const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGe
       const currenFile = data?.urlImageFile?.file;
       if (currenFile) {
         const file = new FormData();
-        file.append("image", currenFile);
+        file.append("file", currenFile);
         const response = await mutateUploadAsync(file);
-        data.urlImage = response?.data;
+        data.urlImage = `${URL_IMAGE}${response?.filePath}`;
       }
       const sendData = { ...data, id };
       await mutateAsyncUpdate(sendData);

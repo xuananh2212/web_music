@@ -3,6 +3,7 @@
 import FormMaster from "@/app/(private)/components/form-master";
 import { default as UploadImage } from "@/app/(private)/components/upload-image/UploadImage";
 import CustomTreeSelect from "@/components/custom-tree-select/CustomTreeSelect";
+import { URL_IMAGE } from "@/helpers/common.constant";
 import { validRequire } from "@/helpers/validate";
 import MUSIC_QUERY_KEY_ENUM from "@/services/music/keys";
 import musicService from "@/services/music/musicService";
@@ -26,7 +27,7 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
   const [form] = useForm();
   const { isPending: isUploadPending, mutateAsync: mutateUploadAsync } = useMutation({
     mutationFn: async (file: FormData) => {
-      const response = await UploadService.uploadImage(file);
+      const response = await UploadService.uploadFileVideo(file);
       return response?.data;
     },
   });
@@ -50,26 +51,27 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
       const fileVideoFile = data?.fileVideoFile?.file;
       if (currenFile) {
         const file = new FormData();
-        file.append("image", currenFile);
+        file.append("file", currenFile);
         const response = await mutateUploadAsync(file);
-        data.urlImage = response?.data;
+        data.urlImage = `${URL_IMAGE}${response?.filePath}`;
       }
       if (fileMusic) {
         const file = new FormData();
         file.append("file", fileMusic);
         const response = await mutateUploadFileVideoAsync(file);
-        data.fileUrl = response?.data;
+        data.fileUrl = `${URL_IMAGE}${response?.filePath}`;
       }
       if (fileVideoFile) {
         const file = new FormData();
         file.append("file", fileVideoFile);
         const response = await mutateUploadFileVideoAsync(file);
-        data.videoUrl = response?.data;
+        data.videoUrl = `${URL_IMAGE}${response?.filePath}`;
       }
       await mutateAsync({
         ...data,
         releaseDate: data.releaseDate?.toISOString(),
         artistId: data?.artist?.value,
+        genreId: data?.genre?.value,
         albumId: data?.album?.value,
       });
     } catch (err) {}
@@ -84,9 +86,9 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
       const currenFile = data?.urlImageFile?.file;
       if (currenFile) {
         const file = new FormData();
-        file.append("image", currenFile);
+        file.append("file", currenFile);
         const response = await mutateUploadAsync(file);
-        data.urlImage = response?.data;
+        data.urlImage = `${URL_IMAGE}${response?.filePath}`;
       }
       const sendData = {
         ...data,
