@@ -1,6 +1,6 @@
 import Icons from "@/components/Icons";
 import { validateImage } from "@/helpers/validate";
-import { Button, Form, Image } from "antd";
+import { Button, Form, Image, Input } from "antd";
 import { useWatch } from "antd/es/form/Form";
 import Dragger from "antd/es/upload/Dragger";
 import clsx from "clsx";
@@ -38,40 +38,45 @@ const UploadImage = ({ form, nameUrl, readonly, nameFile, label, content = "Tả
   };
   const image = useWatch(nameUrl, { form, preserve: true });
   return (
-    <Form.Item className={clsx(readonly ? "pointer-events-none" : "")} name={nameFile} label={label}>
-      <Dragger
-        beforeUpload={beforeUploadHandler}
-        onChange={(info) => onChangeHandler(info)}
-        className={styles.removeNameFile}
-      >
-        {image ? (
-          <div className={styles.imageContainer}>
-            <Image src={image} alt="image" />
-            <div className={styles.overlay}>
-              <Button
-                className="bg-transparent text-white border-none"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteImage();
-                }}
-              >
-                X
-              </Button>
+    <>
+      <Form.Item className={clsx(readonly ? "pointer-events-none" : "")} name={nameFile} label={label}>
+        <Dragger
+          beforeUpload={beforeUploadHandler}
+          onChange={(info) => onChangeHandler(info)}
+          className={styles.removeNameFile}
+        >
+          {image ? (
+            <div className={styles.imageContainer}>
+              <Image src={image} alt="image" />
+              <div className={styles.overlay}>
+                <Button
+                  className="bg-transparent text-white border-none"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteImage();
+                  }}
+                >
+                  X
+                </Button>
+              </div>
             </div>
-          </div>
-        ) : (
-          <>
-            <p className="ant-upload-drag-icon">
-              <Icons className="!text-color-100" name="inbox" size={48} />
-            </p>
-            <p className="ant-upload-text text-center font-normal text-xs leading-6">{content}</p>
-            <p className="ant-upload-hint text-center font-roboto text-[10px] font-normal leading-[22px] text-black/45">
-              Tải lên ảnh có dung lượng dưới 5MB
-            </p>
-          </>
-        )}
-      </Dragger>
-    </Form.Item>
+          ) : (
+            <>
+              <p className="ant-upload-drag-icon">
+                <Icons className="!text-color-100" name="inbox" size={48} />
+              </p>
+              <p className="ant-upload-text text-center font-normal text-xs leading-6">{content}</p>
+              <p className="ant-upload-hint text-center font-roboto text-[10px] font-normal leading-[22px] text-black/45">
+                Tải lên ảnh có dung lượng dưới 5MB
+              </p>
+            </>
+          )}
+        </Dragger>
+      </Form.Item>
+      <Form.Item name={nameUrl} className="hidden">
+        <Input />
+      </Form.Item>
+    </>
   );
 };
 

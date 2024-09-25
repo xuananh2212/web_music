@@ -1,10 +1,15 @@
-import cookie from "@/apis/cookies";
+import Cookies from "js-cookie"; // Import js-cookie
 import { useRouter } from "next/navigation";
 
 const useLogout = () => {
   const router = useRouter();
+
   return async () => {
-    await Promise.all([cookie.del("access_token"), cookie.del("refresh_token")]);
+    // Xóa các cookie "access_token" và "refresh_token"
+    Cookies.remove("access_token");
+    Cookies.remove("refresh_token");
+
+    // Điều hướng về trang chủ
     router.push("/");
   };
 };

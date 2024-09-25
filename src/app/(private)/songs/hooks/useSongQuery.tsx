@@ -30,12 +30,12 @@ const useAlbumQuery: BaseQueryTable = () => {
   const [queryParams, setQueryParams] = useState<any>(initialQueryParams);
   const { isPending: isPendingDelete, mutateAsync: mutateDeleteAsync } = useMutation({
     mutationFn: async (id: string) => {
-      return musicService.deleteAlbum(id);
+      return musicService.deleteSong(id);
     },
     onSuccess: () => {
       toast.success("Xóa thành công");
       queryClient.invalidateQueries({
-        queryKey: [MUSIC_QUERY_KEY_ENUM.ALBUMS],
+        queryKey: [MUSIC_QUERY_KEY_ENUM.SONGS],
       });
     },
   });
@@ -63,7 +63,7 @@ const useAlbumQuery: BaseQueryTable = () => {
   };
   const listAction: FormType[] = ["view", "edit", "delete"];
   const { isPending, refetch, data } = useQuery({
-    queryKey: [MUSIC_QUERY_KEY_ENUM.ALBUMS, queryParams],
+    queryKey: [MUSIC_QUERY_KEY_ENUM.SONGS, queryParams],
     queryFn: async () => {
       const response = await musicService.getSongs(queryParams);
       return formatData(response?.data);

@@ -23,7 +23,7 @@ export interface AddEditSongProps {
 }
 
 const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
-  const { data: dataAlbum, isFetching } = useAlbumDetailQuery(id);
+  const { data: dataSong, isFetching } = useAlbumDetailQuery(id);
   const [form] = useForm();
   const { isPending: isUploadPending, mutateAsync: mutateUploadAsync } = useMutation({
     mutationFn: async (file: FormData) => {
@@ -45,7 +45,6 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
     mutateAsync: UseMutateAsyncFunction<any, Error, any, unknown>
   ) => {
     try {
-      console.log("data", data);
       const currenFile = data?.urlImageFile?.file;
       const fileMusic = data?.fileMp3File?.file;
       const fileVideoFile = data?.fileVideoFile?.file;
@@ -82,20 +81,37 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
     data: Record<string, any>,
     mutateAsyncUpdate: UseMutateAsyncFunction<any, Error, any, unknown>
   ) => {
+    console.log("data", data);
     try {
       const currenFile = data?.urlImageFile?.file;
+      const fileMusic = data?.fileMp3File?.file;
+      const fileVideoFile = data?.fileVideoFile?.file;
       if (currenFile) {
         const file = new FormData();
         file.append("file", currenFile);
         const response = await mutateUploadAsync(file);
         data.urlImage = `${URL_IMAGE}${response?.filePath}`;
       }
+      if (fileMusic) {
+        const file = new FormData();
+        file.append("file", fileMusic);
+        const response = await mutateUploadFileVideoAsync(file);
+        data.fileUrl = `${URL_IMAGE}${response?.filePath}`;
+      }
+      if (fileVideoFile) {
+        const file = new FormData();
+        file.append("file", fileVideoFile);
+        const response = await mutateUploadFileVideoAsync(file);
+        data.videoUrl = `${URL_IMAGE}${response?.filePath}`;
+      }
+      console.log("data", data);
       const sendData = {
         ...data,
         id,
         releaseDate: data?.releaseDate && data.releaseDate.toISOString(),
         artistId: data?.artist?.value,
       };
+      console.log("sendData", sendData);
       await mutateAsyncUpdate(sendData);
       form.resetFields();
       onClose?.();
@@ -110,8 +126,8 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
       titleName="Bài hát"
       handleAdd={handleAdd}
       handleUpdate={handleUpdate}
-      queryKey={[MUSIC_QUERY_KEY_ENUM.ALBUMS]}
-      queryDetailKey={[MUSIC_QUERY_KEY_ENUM.ALBUM_DETAIL]}
+      queryKey={[MUSIC_QUERY_KEY_ENUM.SONGS]}
+      queryDetailKey={[MUSIC_QUERY_KEY_ENUM.SONG_DETAIL]}
       mutationAddFn={async (data: any) => {
         const response = await musicService.createSong(data);
         return response?.data;
@@ -126,16 +142,22 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
       id={id}
       initialDefaultValues={{}}
       dataEdit={{
-        ...dataAlbum?.data?.data,
-        userName: dataAlbum?.data?.data?.data_name,
-        urlImage: dataAlbum?.data?.data?.image_url,
-        artist: {
-          value: dataAlbum?.data?.data?.artist_id,
-          label: dataAlbum?.data?.data?.Artist?.stage_name,
+        ...dataSong?.data?.data,
+        genre: {
+          value: dataSong?.data?.data?.Genre?.id,
+          label: dataSong?.data?.data?.Genre?.name,
         },
-        releaseDate: dataAlbum?.data?.data?.release_date
-          ? dayjs(dataAlbum?.data?.data?.release_date)
-          : dataAlbum?.data?.data?.release_date,
+        album: {
+          value: dataSong?.data?.data?.Album?.id,
+          label: dataSong?.data?.data?.Album?.title,
+        },
+        userName: dataSong?.data?.data?.data_name,
+        urlImage: dataSong?.data?.data?.image_url,
+        fileUrl: dataSong?.data?.data?.file_url,
+        videoUrl: dataSong?.data?.data?.video_url,
+        releaseDate: dataSong?.data?.data?.release_date
+          ? dayjs(dataSong?.data?.data?.release_date)
+          : dataSong?.data?.data?.release_date,
       }}
       minWidth={1100}
       onAddSuccess={onAddSuccess}
@@ -196,11 +218,11 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
           <UploadImage label="Hình ảnh" readonly={typeView} form={form} nameUrl="urlImage" nameFile="urlImageFile" />
         </div>
         <div className="row-span-2 col-span-2">
-          <UploadFile form={form} nameUrl="file_url" nameFile="fileMp3File" label="Tải file nhạc" fileType="audio" />
+          <UploadFile form={form} nameUrl="fileUrl" nameFile="fileMp3File" label="Tải file nhạc" fileType="audio" />
         </div>
 
         <div className="row-span-2 col-span-2">
-          <UploadFile form={form} nameUrl="video_url" nameFile="fileVideoFile" label="Tải video" fileType="video" />
+          <UploadFile form={form} nameUrl="videoUrl" nameFile="fileVideoFile" label="Tải video" fileType="video" />
         </div>
 
         <div className="row-span-2 col-span-2">
