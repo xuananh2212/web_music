@@ -37,7 +37,6 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
       return response?.data;
     },
   });
-  const typeViewEdit = type === "edit" || type === "view";
   const typeView = type === "view";
 
   const handleAdd = async (
@@ -81,7 +80,6 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
     data: Record<string, any>,
     mutateAsyncUpdate: UseMutateAsyncFunction<any, Error, any, unknown>
   ) => {
-    console.log("data", data);
     try {
       const currenFile = data?.urlImageFile?.file;
       const fileMusic = data?.fileMp3File?.file;
@@ -111,7 +109,6 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
         releaseDate: data?.releaseDate && data.releaseDate.toISOString(),
         artistId: data?.artist?.value,
       };
-      console.log("sendData", sendData);
       await mutateAsyncUpdate(sendData);
       form.resetFields();
       onClose?.();
@@ -119,7 +116,7 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
   };
   return (
     <FormMaster
-      isPending={isUploadPending}
+      isPending={isUploadPending || isUploadFileVideoPending}
       form={form}
       type={type}
       isFetching={isFetching}

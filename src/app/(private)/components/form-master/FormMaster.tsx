@@ -70,7 +70,8 @@ const FormMaster = ({
     onSuccess: () => {
       toast.success(`Thêm ${titleName} thành công`);
       queryClient.invalidateQueries({
-        queryKey: [...queryDetailKey],
+        queryKey: [...queryKey],
+        refetchType: "none",
       });
       onAddSuccess();
     },
@@ -93,6 +94,7 @@ const FormMaster = ({
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [...queryKey],
+        refetchType: "none",
       });
     },
   });

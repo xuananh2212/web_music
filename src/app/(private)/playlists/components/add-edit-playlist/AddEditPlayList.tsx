@@ -12,16 +12,16 @@ import { UseMutateAsyncFunction, useMutation } from "@tanstack/react-query";
 import { DatePicker, Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
 import dayjs from "dayjs";
-import useAlbumDetailQuery from "../../hooks/useAlbumDetailQuery";
-export interface AddEditAlbumProps {
+import usePlaylistDetailQuery from "../../hooks/usePlayListDetailQuery";
+export interface AddEditPlayListProps {
   type: any;
   id?: string;
   onClose?: () => void;
   onAddSuccess: () => void;
 }
 
-const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) => {
-  const { data: dataAlbum, isFetching } = useAlbumDetailQuery(id);
+const AddEditPlayList = ({ id, type, onClose, onAddSuccess }: AddEditPlayListProps) => {
+  const { data: dataPlaylist, isFetching } = usePlaylistDetailQuery(id);
   const [form] = useForm();
   const { isPending: isUploadPending, mutateAsync: mutateUploadAsync } = useMutation({
     mutationFn: async (file: FormData) => {
@@ -29,6 +29,7 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
       return response?.data;
     },
   });
+  console.log("dataPlaylist", dataPlaylist);
   const typeViewEdit = type === "edit" || type === "view";
   const typeView = type === "view";
 
@@ -79,11 +80,11 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
       form={form}
       type={type}
       isFetching={isFetching}
-      titleName="Album"
+      titleName="Danh sách phát"
       handleAdd={handleAdd}
       handleUpdate={handleUpdate}
-      queryKey={[MUSIC_QUERY_KEY_ENUM.ALBUMS]}
-      queryDetailKey={[MUSIC_QUERY_KEY_ENUM.ALBUM_DETAIL]}
+      queryKey={[MUSIC_QUERY_KEY_ENUM.PLAYLIST]}
+      queryDetailKey={[MUSIC_QUERY_KEY_ENUM.PLAYLIST_DETAIL]}
       mutationAddFn={async (data: any) => {
         const response = await musicService.createAlbum(data);
         return response?.data;
@@ -93,21 +94,21 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
         return response?.data;
       }}
       components={{
-        addEditComponent: AddEditAlbum,
+        addEditComponent: AddEditPlayList,
       }}
       id={id}
       initialDefaultValues={{}}
       dataEdit={{
-        ...dataAlbum?.data?.data,
-        userName: dataAlbum?.data?.data?.data_name,
-        urlImage: dataAlbum?.data?.data?.image_url,
+        ...dataPlaylist?.data?.data,
+        userName: dataPlaylist?.data?.data?.data_name,
+        urlImage: dataPlaylist?.data?.data?.image_url,
         artist: {
-          value: dataAlbum?.data?.data?.artist_id,
-          label: dataAlbum?.data?.data?.Artist?.stage_name,
+          value: dataPlaylist?.data?.data?.artist_id,
+          label: dataPlaylist?.data?.data?.Artist?.stage_name,
         },
-        releaseDate: dataAlbum?.data?.data?.release_date
-          ? dayjs(dataAlbum?.data?.data?.release_date)
-          : dataAlbum?.data?.data?.release_date,
+        releaseDate: dataPlaylist?.data?.data?.release_date
+          ? dayjs(dataPlaylist?.data?.data?.release_date)
+          : dataPlaylist?.data?.data?.release_date,
       }}
       minWidth={700}
       onAddSuccess={onAddSuccess}
@@ -152,4 +153,4 @@ const AddEditAlbum = ({ id, type, onClose, onAddSuccess }: AddEditAlbumProps) =>
     </FormMaster>
   );
 };
-export default AddEditAlbum;
+export default AddEditPlayList;

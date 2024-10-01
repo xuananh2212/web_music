@@ -43,9 +43,9 @@ const AddEditGenres = ({ id, type, onClose, onSuccess, onAddSuccess }: AddEditGe
         file.append("file", currenFile);
         const response = await mutateUploadAsync(file);
         data.urlImage = `${URL_IMAGE}${response?.filePath}`;
-        onClose?.();
       }
       await mutateAsync(data);
+      onClose?.();
     } catch (err) {}
   };
 

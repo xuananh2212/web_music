@@ -2,7 +2,7 @@ import { MenuProps } from "antd";
 import Link from "next/link";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { CgMusicSpeaker } from "react-icons/cg";
-import { FaChartBar } from "react-icons/fa";
+import { FaChartBar, FaRegListAlt } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import { GrUserManager } from "react-icons/gr";
 import { LuAlbum } from "react-icons/lu";
@@ -38,5 +38,10 @@ export const categories: MenuItem[] = [
     key: "/songs",
     label: <Link href={"/songs"}>Bài hát</Link>,
     icon: <BsMusicNoteBeamed size={20} />,
+  },
+  {
+    key: "/playlists",
+    label: <Link href={"/playlists"}>Danh sách phát</Link>,
+    icon: <FaRegListAlt size={20} />,
   },
 ];

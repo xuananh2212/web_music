@@ -14,37 +14,28 @@ export const ALBUM_LIST_DEFAULT_COLUMNS: TableBaseProps["columns"] = [
     isSort: true,
   },
   {
-    title: "Tên album",
-    dataIndex: "title",
+    title: "Tên danh sách phát",
+    dataIndex: "name",
     ellipsis: true,
     width: 200,
     isSort: true,
   },
   {
-    title: "Nghệ sĩ",
-    dataIndex: "artist_name",
+    title: "userId",
+    dataIndex: "user_id",
     ellipsis: true,
     width: 200,
     isSort: true,
   },
   {
     title: "Hình ảnh",
-    dataIndex: "image_url",
+    dataIndex: "url_image",
     width: 200,
     isSort: true,
     isDrag: true,
     render: (value: string) => {
       return value && <Image width={35} height={35} src={value} />;
     },
-  },
-  {
-    title: "Ngày phát hành",
-    dataIndex: "release_date",
-    width: 200,
-    ellipsis: true,
-    isSort: true,
-    isDrag: true,
-    render: formatDateTime,
   },
   {
     title: "Thời gian tạo",

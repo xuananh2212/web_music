@@ -107,6 +107,12 @@ class musicService {
       params,
     });
   }
+  static getListenCounts(params?: any) {
+    return axiosInstance.get("/song/v1/listen-count", {
+      baseURL: API,
+      params,
+    });
+  }
   static createSong(data: any) {
     return axiosInstance.post("/song/v1", data, {
       baseURL: API,
@@ -124,6 +130,33 @@ class musicService {
   }
   static updateSong(data: any) {
     return axiosInstance.post(`/song/v1/${data?.id}`, data, {
+      baseURL: API,
+    });
+  }
+  // playlist
+  static getPlaylists(params: any) {
+    return axiosInstance.get("/play-list/v1/get-all", {
+      baseURL: API,
+      params,
+    });
+  }
+  static createPlaylist(data: any) {
+    return axiosInstance.post("/play-list/v1", data, {
+      baseURL: API,
+    });
+  }
+  static getPlaylistDetail(id: string) {
+    return axiosInstance.get(`/play-list/v1/${id}`, {
+      baseURL: API,
+    });
+  }
+  static deletePlaylist(id: string) {
+    return axiosInstance.delete(`/play-list/v1/${id}`, {
+      baseURL: API,
+    });
+  }
+  static updatePlaylist(data: any) {
+    return axiosInstance.post(`/play-list/v1/${data?.id}`, data, {
       baseURL: API,
     });
   }

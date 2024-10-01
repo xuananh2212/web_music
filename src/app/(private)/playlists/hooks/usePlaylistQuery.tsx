@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import getActionBar from "../../components/table-bar/common/getActionBar";
 import { TableBaseProps } from "../../components/table-base";
 import { ALBUM_LIST_DEFAULT_COLUMNS } from "../columns.setting";
-import AddEditAlbum from "../components/add-edit-album/AddEditAlbum";
+import AddEditAlbum from "../components/add-edit-playlist/AddEditPlayList";
 
 const formatData = (data: any) => {
   return {
@@ -24,7 +24,7 @@ const formatData = (data: any) => {
   };
 };
 
-const useAlbumQuery: BaseQueryTable = () => {
+const usePlaylistQuery: BaseQueryTable = () => {
   const initialQueryParams = { keyword: "" };
   const queryClient = useQueryClient();
   const [queryParams, setQueryParams] = useState<any>(initialQueryParams);
@@ -35,7 +35,7 @@ const useAlbumQuery: BaseQueryTable = () => {
     onSuccess: () => {
       toast.success("Xóa thành công");
       queryClient.invalidateQueries({
-        queryKey: [MUSIC_QUERY_KEY_ENUM.ALBUMS],
+        queryKey: [MUSIC_QUERY_KEY_ENUM.PLAYLIST],
       });
     },
   });
@@ -63,9 +63,9 @@ const useAlbumQuery: BaseQueryTable = () => {
   };
   const listAction: FormType[] = ["view", "edit", "delete"];
   const { isPending, refetch, data } = useQuery({
-    queryKey: [MUSIC_QUERY_KEY_ENUM.ALBUMS, queryParams],
+    queryKey: [MUSIC_QUERY_KEY_ENUM.PLAYLIST, queryParams],
     queryFn: async () => {
-      const response = await musicService.getAlbums(queryParams);
+      const response = await musicService.getPlaylists(queryParams);
       return formatData(response?.data);
     },
     placeholderData: (prev) => prev,
@@ -96,7 +96,8 @@ const useAlbumQuery: BaseQueryTable = () => {
     defaultColumns: ALBUM_LIST_DEFAULT_COLUMNS,
     onChangeQueryParams: setQueryParams,
     onAction,
+    hiddenAdd: true,
   };
 };
 
-export default useAlbumQuery;
+export default usePlaylistQuery;

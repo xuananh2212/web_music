@@ -1,13 +1,11 @@
-import getMetadata from "@/configs/site.config";
-import { Metadata } from "next";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const metadata = getMetadata("Tổng quan");
-  return metadata;
-}
-
-const Page = () => {
-  return <div></div>;
+import dynamic from "next/dynamic";
+const DynamicChart = dynamic(() => import("./components/View"), { ssr: false });
+const page = () => {
+  return (
+    <div>
+      <DynamicChart />
+    </div>
+  );
 };
 
-export default Page;
+export default page;
