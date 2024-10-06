@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card } from "antd";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+
 // Xác định kiểu dữ liệu cho chartData
 interface ChartData {
   labels: string[];
@@ -17,29 +18,27 @@ interface ChartData {
   }[];
 }
 
-const View = () => {
+const ViewTrending = () => {
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const { isLoading, data } = useQuery({
-    queryKey: [MUSIC_QUERY_KEY_ENUM.SONGS],
+    queryKey: [MUSIC_QUERY_KEY_ENUM.TRENDING_SONGS],
     queryFn: async () => {
-      const response = await musicService.getListenCounts({});
+      const response = await musicService.getTrendingSongs({});
       return response?.data;
     },
     placeholderData: (prev) => prev,
   });
-  console.log(data);
-
+  console.log("data", data);
   useEffect(() => {
-    if (data?.data) {
-      const labels = data?.data.map((item: any) => item.songTitle);
-      const listenCounts = data?.data.map((item: any) => item.listenCount);
-
+    if (data) {
+      const labels = data?.data?.map((item: any) => item.title);
+      const trendingScores = data?.data?.map((item: any) => item?.calculatedTrendingScore);
       setChartData({
         labels,
         datasets: [
           {
-            label: "Số lượt nghe nhiều nhất",
-            data: listenCounts,
+            label: "Điểm thịnh hành",
+            data: trendingScores,
             backgroundColor: "rgba(75, 192, 192, 0.6)",
             borderColor: "rgba(75, 192, 192, 1)",
             borderWidth: 1,
@@ -49,7 +48,6 @@ const View = () => {
     }
 
     return () => {
-      // Cleanup effect khi component bị unmount
       setChartData(null);
     };
   }, [data]);
@@ -58,10 +56,26 @@ const View = () => {
 
   return (
     <Card>
-      <h2>Số lượt nghe nhiều nhất bài hát</h2>
-      <Bar data={chartData} options={{ responsive: true, scales: { y: { beginAtZero: true } } }} />
+      <h2>Danh sách bài hát thịnh hành</h2>
+      <Bar
+        data={chartData}
+        options={{
+          responsive: true,
+          scales: { y: { beginAtZero: true } },
+          plugins: {
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                label: function (tooltipItem: any) {
+                  return `Điểm thịnh hành: ${tooltipItem.raw}`; // Hiển thị giá trị cột khi hover
+                },
+              },
+            },
+          },
+        }}
+      />
     </Card>
   );
 };
 
-export default View;
+export default ViewTrending;

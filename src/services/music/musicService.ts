@@ -3,6 +3,13 @@ import { API } from "@/configs/env.config";
 import Cookies from "js-cookie";
 import { LoginReq } from "./types";
 class musicService {
+  // biểu dồ
+  static getGenreStats(params?: any) {
+    return axiosInstance.get("/genre/v1/get-genre-stats", {
+      baseURL: API,
+      params,
+    });
+  }
   // Auth
   static login(data: LoginReq) {
     return axiosInstance.post("/auth/v1/sign-in", data, {
@@ -158,6 +165,25 @@ class musicService {
   static updatePlaylist(data: any) {
     return axiosInstance.post(`/play-list/v1/${data?.id}`, data, {
       baseURL: API,
+    });
+  }
+  // Lịch sử nghe
+  static getUserHistories(params: any) {
+    return axiosInstance.get("/user-history/v1/get-all", {
+      baseURL: API,
+      params,
+    });
+  }
+  static getTotalCount(params: any) {
+    return axiosInstance.get("/dashboard/v1/total-count", {
+      baseURL: API,
+      params,
+    });
+  }
+  static getTrendingSongs(params: any) {
+    return axiosInstance.get("/song/v1/get-trending", {
+      baseURL: API,
+      params,
     });
   }
 }

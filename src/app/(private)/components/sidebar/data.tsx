@@ -6,6 +6,7 @@ import { FaChartBar, FaRegListAlt } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import { GrUserManager } from "react-icons/gr";
 import { LuAlbum } from "react-icons/lu";
+import { MdHistory } from "react-icons/md";
 
 type MenuItem = Required<MenuProps>["items"][number];
 export const categories: MenuItem[] = [
@@ -43,5 +44,10 @@ export const categories: MenuItem[] = [
     key: "/playlists",
     label: <Link href={"/playlists"}>Danh sách phát</Link>,
     icon: <FaRegListAlt size={20} />,
+  },
+  {
+    key: "/user-history",
+    label: <Link href={"/user-history"}>Lịch sử nghe</Link>,
+    icon: <MdHistory size={20} />,
   },
 ];
