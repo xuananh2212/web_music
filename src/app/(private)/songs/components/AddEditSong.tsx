@@ -72,8 +72,8 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
         genreId: data?.genre?.value,
         albumId: data?.album?.value,
       });
+      onClose?.();
     } catch (err) {}
-    onClose?.();
   };
 
   const handleUpdate = async (
