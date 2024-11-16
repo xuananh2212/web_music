@@ -33,7 +33,7 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
   });
   const { isPending: isUploadFileVideoPending, mutateAsync: mutateUploadFileVideoAsync } = useMutation({
     mutationFn: async (file: FormData) => {
-      const response = await UploadService.uploadFileVideo(file);
+      const response = await UploadService.uploadFileVideoV2(file);
       return response?.data;
     },
   });
@@ -57,13 +57,13 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
         const file = new FormData();
         file.append("file", fileMusic);
         const response = await mutateUploadFileVideoAsync(file);
-        data.fileUrl = `${URL_IMAGE}${response?.filePath}`;
+        data.fileUrl = `${URL_IMAGE}${response?.playlistUrl}`;
       }
       if (fileVideoFile) {
         const file = new FormData();
         file.append("file", fileVideoFile);
         const response = await mutateUploadFileVideoAsync(file);
-        data.videoUrl = `${URL_IMAGE}${response?.filePath}`;
+        data.videoUrl = `${URL_IMAGE}${response?.playlistUrl}`;
       }
       await mutateAsync({
         ...data,
@@ -94,15 +94,14 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
         const file = new FormData();
         file.append("file", fileMusic);
         const response = await mutateUploadFileVideoAsync(file);
-        data.fileUrl = `${URL_IMAGE}${response?.filePath}`;
+        data.fileUrl = `${URL_IMAGE}${response?.playlistUrl}`;
       }
       if (fileVideoFile) {
         const file = new FormData();
         file.append("file", fileVideoFile);
         const response = await mutateUploadFileVideoAsync(file);
-        data.videoUrl = `${URL_IMAGE}${response?.filePath}`;
+        data.videoUrl = `${URL_IMAGE}${response?.playlistUrl}`;
       }
-      console.log("data", data);
       const sendData = {
         ...data,
         id,
@@ -215,11 +214,25 @@ const AddEditSong = ({ id, type, onClose, onAddSuccess }: AddEditSongProps) => {
           <UploadImage label="Hình ảnh" readonly={typeView} form={form} nameUrl="urlImage" nameFile="urlImageFile" />
         </div>
         <div className="row-span-2 col-span-2">
-          <UploadFile form={form} nameUrl="fileUrl" nameFile="fileMp3File" label="Tải file nhạc" fileType="audio" />
+          <UploadFile
+            type={type}
+            form={form}
+            nameUrl="fileUrl"
+            nameFile="fileMp3File"
+            label="Tải file nhạc"
+            fileType="audio"
+          />
         </div>
 
         <div className="row-span-2 col-span-2">
-          <UploadFile form={form} nameUrl="videoUrl" nameFile="fileVideoFile" label="Tải video" fileType="video" />
+          <UploadFile
+            type={type}
+            form={form}
+            nameUrl="videoUrl"
+            nameFile="fileVideoFile"
+            label="Tải video"
+            fileType="video"
+          />
         </div>
 
         <div className="row-span-2 col-span-2">

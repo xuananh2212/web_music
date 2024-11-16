@@ -4,9 +4,11 @@ import { Button, Form, Image } from "antd";
 import { useWatch } from "antd/es/form/Form";
 import Dragger from "antd/es/upload/Dragger";
 import clsx from "clsx";
+import ReactPlayer from "react-player";
 import { toast } from "sonner";
+import { FormType } from "../table-master";
+import AudioPlayer from "./AudioPlayer";
 import styles from "./UploadFile.module.scss"; // Updated file name
-
 interface PropsUploadFile {
   form: any;
   nameUrl: string; // name for the URL of the uploaded file
@@ -15,6 +17,7 @@ interface PropsUploadFile {
   readonly?: boolean;
   content?: string;
   fileType: "image" | "audio" | "video"; // New prop to handle file type
+  type?: FormType;
 }
 
 const UploadFile = ({
@@ -25,6 +28,7 @@ const UploadFile = ({
   label,
   content = "Tải file",
   fileType = "image", // Default file type is image
+  type,
 }: PropsUploadFile) => {
   const beforeUploadHandler = (file: File) => {
     return false; // Prevent default upload behavior
@@ -90,7 +94,17 @@ const UploadFile = ({
       >
         {fileUrl ? (
           <div className={styles.fileContainer}>
-            {renderPreview()} {/* Renders the appropriate preview based on file type */}
+            {type !== "add" ? (
+              <>
+                {fileType === "audio" ? (
+                  <AudioPlayer src={fileUrl} />
+                ) : (
+                  <ReactPlayer url={fileUrl} controls playing={false} width="50%" height="50%" />
+                )}
+              </>
+            ) : (
+              renderPreview()
+            )}
             <div className={styles.overlay}>
               <Button
                 className="bg-transparent text-white border-none"
